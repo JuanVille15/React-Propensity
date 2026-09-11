@@ -7,7 +7,23 @@ authors = [
     { name = "JuanVille15", email = "juanville9915@gmail.com" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "ipykernel>=7.3.0",
+    "joblib>=1.6.0",
+    "matplotlib>=3.11.1",
+    "numpy>=2.5.3",
+    "optuna>=5.0.0",
+    "pandas>=3.0.5",
+    "pathlib>=1.0.1",
+    "pyarrow>=25.0.1",
+    "pyodbc>=5.3.0",
+    "python-dotenv>=1.2.3",
+    "pyyaml>=6.0.3",
+    "scikit-learn>=1.9.1",
+    "seaborn>=0.13.2",
+    "sqlalchemy>=2.0.52",
+    "xgboost>=3.4.1",
+]
 
 [project.scripts]
 propensity = "propensity:main"
