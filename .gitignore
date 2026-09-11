@@ -28,7 +28,7 @@ __pycache__/
 # Config privados
 # ===============================
 *.secrets.yaml
-configs/config.yml
+config/config.yml
 # ===============================
 # Modelos grandes (artefactos ML)
 # ===============================
@@ -48,3 +48,7 @@ generate_report.py
 #data
 # ==================
 data/
+# ===============================
+# CLAUDE
+# ===============================
+CLAUDE.md
