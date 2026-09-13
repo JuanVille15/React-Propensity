@@ -11,7 +11,7 @@ WITH INACTIVOS_MES_ANTERIOR AS (
 		AND dime.strFuente ='CooTaylor'
 		AND dime.strDescEstadoFuente ='Inactivo'
 	WHERE
-		BodegaCorporativa.$partition.Pf_mes(fct.dtmfechainsercion) =  BodegaCorporativa.$partition.pf_mes('2026-07-01')
+		BodegaCorporativa.$partition.Pf_mes(fct.dtmfechainsercion) =  BodegaCorporativa.$partition.pf_mes(:periodo_anterior)
 		AND fct.[indregistroactual] = 1 
 		AND fct.strfuente = 'CooTaylor'
 )
@@ -35,7 +35,7 @@ ON
 	AND dime.numCodTipoEstado = 1
 	AND dime.strFuente ='CooTaylor'
 WHERE
-	BodegaCorporativa.$partition.Pf_mes(fct.dtmfechainsercion) =  BodegaCorporativa.$partition.pf_mes('2026-08-01')
+	BodegaCorporativa.$partition.Pf_mes(fct.dtmfechainsercion) =  BodegaCorporativa.$partition.pf_mes(:periodo_actual)
 	AND fct.[indregistroactual] = 1 
 	AND fct.strfuente = 'CooTaylor'
 	AND ma.strcodestadoclientefuente = 14;
