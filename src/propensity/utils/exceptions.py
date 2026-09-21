@@ -2,3 +2,6 @@
 
 class LabelQueryError(Exception):
     pass
+
+class FeatureQueryError(Exception):
+    pass
