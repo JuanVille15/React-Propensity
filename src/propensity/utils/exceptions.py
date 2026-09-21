@@ -5,3 +5,9 @@ class LabelQueryError(Exception):
 
 class FeatureQueryError(Exception):
     pass
+
+class DuplicateFeatureError(Exception):
+    pass
+
+class FeatureNoMatchError(Exception):
+    pass
