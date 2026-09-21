@@ -1,17 +1,15 @@
 WITH FacSegmentos AS (
                          SELECT
-                            strPeriodo AS Periodo,
                             strIdentificacion AS ID,
                             numEdad as Edad,
                             numCantidadAniosAntiguedad as Antiguedad,
 			                numCantidadProductos as suma_productos
                          FROM BodegaCorporativa.bodega.factSegmentos
                          WHERE 
-						 	BodegaCorporativa.$partition.pf_mes(dtmFechaInsercion) = BodegaCorporativa.$partition.pf_mes(?)
+						 	BodegaCorporativa.$partition.pf_mes(dtmFechaInsercion) = BodegaCorporativa.$partition.pf_mes(:periodo_foto)
 							AND strIdentificacion IN ({IDS})
                     )
                     SELECT
-                        dem.strPeriodo as Periodo,
                         dem.Documento as ID,
 						dem.Tipo_Documento,
 		                dem.Nombre_Tipo_Vinculacion as Tipo_Vinculacion,
@@ -33,9 +31,8 @@ WITH FacSegmentos AS (
 		                seg.Antiguedad,
 		                seg.suma_productos
                     FROM BodegaCorporativa.Conocimiento.v_Demografica Dem
-                    INNER JOIN FacSegmentos seg
-                        ON dem.strPeriodo = seg.Periodo 
+                    INNER JOIN FacSegmentos seg 
                         AND dem.Documento = seg.ID
                     WHERE 
-						BodegaCorporativa.$partition.pf_mes(dem.dtmFechaInsercion) = BodegaCorporativa.$partition.pf_mes(?)
-						AND dem.Documento IN ({IDS})
+						BodegaCorporativa.$partition.pf_mes(dem.dtmFechaInsercion) = BodegaCorporativa.$partition.pf_mes(:periodo_foto)
+						AND dem.Documento IN ({IDS});
