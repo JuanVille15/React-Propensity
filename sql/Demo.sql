@@ -10,7 +10,7 @@ WITH FacSegmentos AS (
 							AND strIdentificacion IN ({IDS})
                     )
                     SELECT
-                        dem.Documento as ID,
+                        dem.Documento as [strIdentificacion],
 						dem.Tipo_Documento,
 		                dem.Nombre_Tipo_Vinculacion as Tipo_Vinculacion,
 		                dem.Estado_Civil,
@@ -32,7 +32,6 @@ WITH FacSegmentos AS (
 		                seg.suma_productos
                     FROM BodegaCorporativa.Conocimiento.v_Demografica Dem
                     INNER JOIN FacSegmentos seg 
-                        AND dem.Documento = seg.ID
+                        ON dem.Documento = seg.ID
                     WHERE 
-						BodegaCorporativa.$partition.pf_mes(dem.dtmFechaInsercion) = BodegaCorporativa.$partition.pf_mes(:periodo_foto)
-						AND dem.Documento IN ({IDS});
+						BodegaCorporativa.$partition.pf_mes(dem.dtmFechaInsercion) = BodegaCorporativa.$partition.pf_mes(:periodo_foto);
