@@ -4,6 +4,30 @@
 import os
 from dotenv import load_dotenv
 from typing import Literal,cast
+from pathlib import Path
+
+
+def _get_root(
+      marker:str='pyproject.toml'
+   ) -> Path:
+   
+   '''Sube desde este archivo hasta encontrar la raíz del proyecto.'''
+   
+   actual = Path(__file__).resolve()
+   
+   for carpeta in actual.parents:
+      if (carpeta / marker).exists():
+         return carpeta
+   
+   raise FileNotFoundError(
+      f'No se encontro {marker} en ninguna carpeta superior a {actual}'
+   )
+
+PROJECT_ROOT  = _get_root()
+DATA_RAW      = PROJECT_ROOT / 'data' / 'raw'
+DATA_LABELS   = DATA_RAW / 'labels'
+DATA_FEATURES = DATA_RAW / 'features'
+SQL_DIR       = PROJECT_ROOT / 'sql'
 
 def get_db_settings(type:Literal['oracle', 
                                  'sql-server']) -> dict[str, str]:
