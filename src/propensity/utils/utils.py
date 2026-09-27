@@ -7,7 +7,10 @@ from sqlalchemy.exc import SQLAlchemyError
 from pathlib import Path
 from typing import Literal
 from dateutil.relativedelta import relativedelta
-from propensity.utils.exceptions import FeatureQueryError, DuplicateFeatureError, FeatureNoMatchError
+from propensity.utils.exceptions import (
+    FeatureQueryError, DuplicateFeatureError, 
+    FeatureNoMatchError, SaveFileError, 
+)
 
 def find_last(
     dir:str|Path, 
@@ -228,3 +231,30 @@ def _validar_cobertura(
     )
     
     return COBERTURA
+
+def guardar(
+    df:pd.DataFrame, 
+    path: Path, 
+    name: str,
+)-> None:
+    
+    # --- Validamos que la ruta sea valida --- #
+    TODAY = datetime.datetime.today().strftime('%d-%m-%Y')    
+    FILE_NAME = f'{name}_{TODAY}.parquet'
+    FINAL_PATH = path / name / FILE_NAME
+    
+    FINAL_PATH.parent.mkdir(parents=True, exist_ok=True)
+    
+    print(f'Exportando: {FILE_NAME}...')
+    try:
+        (
+            df
+            .to_parquet(
+                FINAL_PATH, 
+                index=False, 
+                engine='pyarrow', 
+            )
+        )
+        print(f'{FILE_NAME} persistido correctamente✅')
+    except Exception as e:
+        raise SaveFileError(f'Error Guardando: {FILE_NAME}-{e}') from e
