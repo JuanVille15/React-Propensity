@@ -11,3 +11,6 @@ class DuplicateFeatureError(Exception):
 
 class FeatureNoMatchError(Exception):
     pass
+
+class SaveFileError(Exception):
+    pass
