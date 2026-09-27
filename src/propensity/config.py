@@ -54,6 +54,11 @@ def get_db_settings(type:Literal['oracle',
    else:
       VALORES = {
          'KIND':type, 
+         'USER':os.getenv('USER_GCC'),
+         'PASSWORD':os.getenv('PASSWORD_GCC'),
+         'SERVER':os.getenv('SERVER_GCC'), 
+         'SERVICE':os.getenv('SERVICE_GCC'),
+         'PORT':os.getenv('PORT_GCC'), 
       }
 
    return cast(dict[str,str], VALORES)

@@ -8,8 +8,8 @@ WITH REC AS (
         ON R.CON_CODIGO = C.CON_CODIGO
     WHERE
         C.AGE_CODIGO = 3
-        AND R.HRCD_PERIODO_RECAUDO = ?
-        AND R.ASO_IDENTIFICACION_ASOCIADO IN ({ids})
+        AND R.HRCD_PERIODO_RECAUDO = TO_CHAR(TO_DATE(:periodo_foto,'YYYY-MM-DD'),'YYYYMM')
+        AND R.ASO_IDENTIFICACION_ASOCIADO IN ({IDS})
         AND R.CON_CODIGO IN ('APORTES','CALAMID','RECREA','AUX.FUN.','SOLIDAR.','SOLIDARE')
         AND R.HRCD_NRO_TRANSACCION NOT IN ('71','52','51')
     GROUP BY
@@ -24,19 +24,19 @@ FAC AS (
     FROM GRC.GCC_HIST_FACT_RECAUDO F
     WHERE
         F.AGE_NOMBRE = 'COOMEVA'
-        AND F.HFR_PERIODO_FACT = ?
-        AND F.ASO_IDENTIFICACION IN ({ids})
+        AND F.HFR_PERIODO_FACT = TO_CHAR(TO_DATE(:periodo_foto,'YYYY-MM-DD'),'YYYYMM')
+        AND F.ASO_IDENTIFICACION IN ({IDS})
         AND F.CON_CODIGO IN ('APORTES','CALAMID','RECREA','AUX.FUN.','SOLIDAR.','SOLIDARE')
     GROUP BY
         F.HFR_PERIODO_FACT, F.ASO_IDENTIFICACION
 )
 SELECT
-    COALESCE(FAC."Periodo", REC."Periodo") AS "Periodo",
-    COALESCE(FAC."Id", REC."Id")           AS "Id",
+    COALESCE(FAC."Periodo", REC."Periodo") AS "strPeriodo",
+    COALESCE(FAC."Id", REC."Id")           AS "strIdentificacion",
     FAC."Cuota_Mes",
     FAC."Vencido_Mes",
     REC."Valor_Recaudado_Total"
 FROM FAC
 FULL JOIN REC
     ON FAC."Periodo" = REC."Periodo"
-    AND FAC."Id"     = REC."Id";
+    AND FAC."Id"     = REC."Id"

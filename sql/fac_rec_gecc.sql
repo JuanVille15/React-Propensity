@@ -8,8 +8,8 @@ WITH FAC AS (
     INNER JOIN BodegaCorporativa.bodega.dimConceptoFacturaGECC c
         ON f.strCodConcepto = c.strCodConcepto
     WHERE
-        BodegaCorporativa.$partition.pf_mes(f.dtmFechaInsercion) = BodegaCorporativa.$partition.pf_mes('?')
-        AND f.strIdentificacion IN ({ids})
+        BodegaCorporativa.$partition.pf_mes(f.dtmFechaInsercion) = BodegaCorporativa.$partition.pf_mes(:periodo_foto)
+        AND f.strIdentificacion IN ({IDS})
     GROUP BY f.strPeriodo, f.strIdentificacion
 ),
 REC AS (
@@ -22,13 +22,13 @@ REC AS (
     INNER JOIN BodegaCorporativa.bodega.dimConceptoFacturaGECC c
         ON r.strCodConcepto = c.strCodConcepto
     WHERE
-        BodegaCorporativa.$partition.pf_mes(r.dtmFechaInsercion) = BodegaCorporativa.$partition.pf_mes('?')
-        AND r.strIdentificacion IN ({ids})
+        BodegaCorporativa.$partition.pf_mes(r.dtmFechaInsercion) = BodegaCorporativa.$partition.pf_mes(:periodo_foto)
+        AND r.strIdentificacion IN ({IDS})
     GROUP BY r.strPeriodo, r.strIdentificacion
 )
 SELECT
-    COALESCE(FAC."Periodo", REC."Periodo") AS "Periodo",
-    COALESCE(FAC."Id",      REC."Id")      AS "Id",
+    COALESCE(FAC."Periodo", REC."Periodo") AS "strPeriodo",
+    COALESCE(FAC."Id",      REC."Id")      AS "strIdentificacion",
     FAC."Valor_Vencido",
     FAC."Valor_Cuota_Mes",
     REC."Recaudo_Vencido",

@@ -17,8 +17,23 @@ def build_bi_con(config:dict[str,str]) -> Engine:
     
     return con_bi
 
+def build_gcc_con(config:dict[str,str]) -> Engine:
+    
+    c_url = URL.create(
+            "oracle+oracledb",
+            username=config['USER'],
+            password=config['PASSWORD'],
+            host=config['SERVER'],
+            port=int(config['PORT']),
+            query={"service_name": config['SERVICE']},
+        )
+
+    con_gcc = create_engine(url=c_url)
+    
+    return con_gcc
+
 
 if __name__ == '__main__':
-    bi_engine = build_bi_con(get_db_settings('sql-server'))
-    with bi_engine.connect() as conn:
-        print(f'Conexion DWH BI establecida✅')
+    gcc_engine = build_gcc_con(get_db_settings('oracle'))
+    with gcc_engine.connect() as conn:
+        print(f'Conexion DWH GCC establecida✅')

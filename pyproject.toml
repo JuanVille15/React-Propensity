@@ -13,6 +13,7 @@ dependencies = [
     "matplotlib>=3.11.1",
     "numpy>=2.5.3",
     "optuna>=5.0.0",
+    "oracledb>=26.0.1",
     "pandas>=3.0.5",
     "pathlib>=1.0.1",
     "pyarrow>=25.0.1",
@@ -27,7 +28,7 @@ dependencies = [
 ]
 
 [project.scripts]
-propensity = "propensity:main"
+propensity = "propensity.cli:main"
 
 [build-system]
 requires = ["uv_build>=0.12.11,<0.13.0"]
