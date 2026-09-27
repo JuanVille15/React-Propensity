@@ -9,9 +9,6 @@ from typing import Literal
 from dateutil.relativedelta import relativedelta
 from propensity.utils.exceptions import FeatureQueryError, DuplicateFeatureError, FeatureNoMatchError
 
-
-
-
 def find_last(
     dir:str|Path, 
     ext:str = '.parquet', 
@@ -150,12 +147,7 @@ def batch_query(
                             con=conn,
                             params=PARAMETROS,  
                             dtype={
-                               'Documento':int,
-                            }
-                        )
-                        .rename(
-                            columns={
-                                'Documento': 'strIdentificacion', 
+                               'strIdentificacion':int,
                             }
                         )
                         .assign(
