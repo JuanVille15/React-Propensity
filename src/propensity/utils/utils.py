@@ -280,8 +280,7 @@ def batch_query(
         feature=feature,
     )
 
-    print(f'Cobertura {kind}:\n{COBERTURA.to_string(index=False)}')
-
+    print(f'Cobertura {kind}:\n{COBERTURA.to_string(index=False)}')   
     CRITICOS = (
         COBERTURA[
             COBERTURA['cobertura'] < umbral

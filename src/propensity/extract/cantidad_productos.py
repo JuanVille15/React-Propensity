@@ -16,7 +16,7 @@ def extract_cantidad_productos(
     labels: pd.DataFrame,
     engine: Engine,
     rezago: int = REZAGO,
-    umbral: float = 0.95,
+    umbral: float = 0.3,
 ) -> pd.DataFrame:
     '''Conteo de productos distintos en `t - rezago`, anclado a la etiqueta.'''
 
