@@ -27,6 +27,7 @@ PROJECT_ROOT  = _get_root()
 DATA_RAW      = PROJECT_ROOT / 'data' / 'raw'
 DATA_LABELS   = DATA_RAW / 'labels'
 DATA_FEATURES = DATA_RAW / 'features'
+DATA_INTERIM  = PROJECT_ROOT / 'data' / 'interim'
 SQL_DIR       = PROJECT_ROOT / 'sql'
 
 def get_db_settings(type:Literal['oracle', 

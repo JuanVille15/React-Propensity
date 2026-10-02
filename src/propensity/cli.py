@@ -18,6 +18,12 @@ FUENTES = [
     'gestiones',
 ]
 
+# --- Fuentes con limpieza definida (ver LIMPIEZAS en pipeline.py) --- #
+
+LIMPIABLES = [
+    'demografica',
+]
+
 
 def main() -> None:
 
@@ -50,6 +56,19 @@ def main() -> None:
         help='Cuantos periodos etiquetar (solo labels / all)',
     )
 
+    # --- clean --- #
+
+    p_clean = sub.add_parser(
+        'clean',
+        help='Limpia una fuente de data/raw/features/ y la persiste en data/interim/',
+    )
+    p_clean.add_argument(
+        '--fuente',
+        choices=LIMPIABLES + ['all'],
+        required=True,
+        help="'all' limpia todas las fuentes con limpieza definida",
+    )
+
     args = parser.parse_args()
 
     if args.comando == 'extract':
@@ -60,6 +79,11 @@ def main() -> None:
             periodo=args.periodo,
             n_periodos=args.n_periodos,
         )
+
+    elif args.comando == 'clean':
+        from propensity.pipeline import run_clean
+
+        run_clean(fuente=args.fuente)
 
 
 if __name__ == '__main__':

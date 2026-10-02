@@ -9,7 +9,7 @@ from typing import Callable
 import pandas as pd
 from sqlalchemy import Engine
 
-from propensity.config import DATA_FEATURES, DATA_LABELS, DATA_RAW, get_db_settings
+from propensity.config import DATA_FEATURES, DATA_INTERIM, DATA_LABELS, DATA_RAW, get_db_settings
 from propensity.db import build_bi_con, build_gcc_con
 from propensity.extract.cantidad_productos import extract_cantidad_productos
 from propensity.extract.demografica import extract_demografica
@@ -20,6 +20,7 @@ from propensity.extract.gestiones import extract_gestiones
 from propensity.extract.labels import extract_labels
 from propensity.extract.pagos import EMPRESAS, extract_pagos
 from propensity.extract.v_360 import extract_v_360
+from propensity.transformacion.clean_demo import clean_demo
 from propensity.utils.utils import find_last, guardar
 
 # --- Cada fuente: que funcion la extrae y contra que base --- #
@@ -34,6 +35,14 @@ FUENTES: dict[str, tuple[Callable, str]] = {
     'fac_rec_coomeva':    (extract_fac_rec_coomeva,    'gcc'),
     'fac_rec_estatu':     (extract_fac_rec_estatu,     'gcc'),
     'gestiones':          (extract_gestiones,          'gcc'),
+}
+
+# --- Limpieza: fuente -> funcion que la limpia.       --- #
+# --- Lee de data/raw/features/<fuente>/ y persiste en --- #
+# --- data/interim/<fuente>/.                          --- #
+
+LIMPIEZAS: dict[str, Callable[[pd.DataFrame], pd.DataFrame]] = {
+    'demografica': clean_demo,
 }
 
 
@@ -177,6 +186,35 @@ def run_extract(
             f'Fuentes con error: {list(fallidas)}. '
             f'Reintenta solo esas con --fuente <nombre>.'
         )
+
+
+def run_clean(fuente: str) -> None:
+    '''Limpia una fuente (o todas las que tienen limpieza) y la persiste.
+
+    Toma el ultimo parquet de data/raw/features/<fuente>/ y guarda el
+    resultado en data/interim/<fuente>/.
+
+    Args:
+        fuente: Nombre en LIMPIEZAS, o 'all'.
+
+    Raises:
+        ValueError: Si la fuente no tiene limpieza definida.
+    '''
+    VALIDAS = list(LIMPIEZAS) + ['all']
+
+    if fuente not in VALIDAS:
+        raise ValueError(f'Fuente sin limpieza: {fuente} - posibles: {VALIDAS}')
+
+    objetivo = list(LIMPIEZAS) if fuente == 'all' else [fuente]
+
+    for nombre in objetivo:
+        print('=' * 60)
+        print(f'LIMPIANDO {nombre.upper()}')
+        print('=' * 60)
+
+        cruda = pd.read_parquet(find_last(DATA_FEATURES / nombre))
+        limpia = LIMPIEZAS[nombre](cruda)
+        guardar(df=limpia, path=DATA_INTERIM, name=nombre)
 
 
 if __name__ == '__main__':
